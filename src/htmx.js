@@ -5017,11 +5017,19 @@ var htmx = (function() {
     if (htmx.config.includeIndicatorStyles !== false) {
       const nonceAttribute = htmx.config.inlineStyleNonce ? ` nonce="${htmx.config.inlineStyleNonce}"` : ''
       getDocument().head.insertAdjacentHTML('beforeend',
-        '<style' + nonceAttribute + '>\
-      .' + htmx.config.indicatorClass + '{opacity:0}\
-      .' + htmx.config.requestClass + ' .' + htmx.config.indicatorClass + '{opacity:1; transition: opacity 200ms ease-in;}\
-      .' + htmx.config.requestClass + '.' + htmx.config.indicatorClass + '{opacity:1; transition: opacity 200ms ease-in;}\
-      </style>')
+        `<style${nonceAttribute}>
+          .${indicatorClass} { opacity: 0; }
+          .${htmx.config.requestClass} .${indicatorClass} { opacity: 1; transition: opacity 200ms ease-in; }
+          .${htmx.config.requestClass}.${indicatorClass} { opacity: 1; transition: opacity 200ms ease-in; }
+
+          .${indicatorClass}-block { display: none; }
+          .${htmx.config.requestClass} .${indicatorClass}-block { display: block; }
+          .${htmx.config.requestClass}.${indicatorClass}-block { display: block; }
+
+          .${indicatorClass}-inline { display: none; }
+          .${htmx.config.requestClass} .${indicatorClass}-inline { display: inline-block; }
+          .${htmx.config.requestClass}.${indicatorClass}-inline { display: inline-block; }
+        </style>`)
     }
   }
 
